@@ -3,11 +3,20 @@ import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 </script>
 
+<!-- 路由出口，页面内容在这里动态显示 -->
 <template>
-  <el-button type="primary">Primary</el-button>
+  <!-- 这是固定写法 -->
+  <RouterView/>
+  <div class="test">
+    test scss
+  </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+.test {
+  color: $priceColor;
+}
+
 header {
   line-height: 1.5;
   max-height: 100vh;
