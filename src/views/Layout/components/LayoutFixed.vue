@@ -3,10 +3,17 @@
 //基于window对象滚动
 import { useScroll } from '@vueuse/core'
 const { y } = useScroll(window)
+//使用pinia中的数据
+import { useCategoryStore } from '@/stores/category'
+//创建实例对象，就可以使用里面的数据
+const categoryStore = useCategoryStore()
+
 </script>
 
 <template>
-  <!-- 控制是否显示，动态类控制 -->
+  <!-- 控制是否显示，动态类控制
+   v-bind用于动态绑定 HTML 属性，使HTML属性的值不再是静态的，
+   可以动态地绑定到Vue实例的数据上 -->
   <div class="app-header-sticky" :class="{ show: y > 78 }">
     <div class="container">
       <RouterLink class="logo" to="/" />
@@ -15,33 +22,10 @@ const { y } = useScroll(window)
         <li class="home">
           <RouterLink to="/">首页</RouterLink>
         </li>
-        <li>
-          <RouterLink to="/">居家</RouterLink>
+        <li class="home" v-for="item in categoryStore.categoryList" :key="item.id">
+          <RouterLink to="/">{{ item.name }}</RouterLink>
         </li>
-        <li>
-          <RouterLink to="/">美食</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">服饰</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">母婴</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">个护</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">严选</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">数码</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">运动</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">杂项</RouterLink>
-        </li>
+
       </ul>
 
       <div class="right">

@@ -1,20 +1,6 @@
 <script setup>
-import { getCateroryAPI } from '@/apis/layout'
-import { onMounted, ref } from 'vue'
-
-const categoryList = ref([])
-//获取数据的业务函数
-const getCaterory = async () => {
-  const res = await getCateroryAPI()
-  console.log(res)
-  categoryList.value = res.result;
-}
-
-//选择合适生命周期，把函数调起来，接口就会发起
-//onMounted - 组件挂载完成后执行
-onMounted(() => {
-  getCaterory()
-})
+import { useCategoryStore } from '@/stores/category'
+const categoryStore = useCategoryStore()
 
 </script>
 
@@ -25,7 +11,7 @@ onMounted(() => {
         <RouterLink to="/">小兔鲜</RouterLink>
       </h1>
       <ul class="app-header-nav">
-        <li class="home" v-for="item in categoryList" :key="item.id">
+        <li class="home" v-for="item in categoryStore.categoryList" :key="item.id">
           <RouterLink to="/">{{ item.name }}</RouterLink>
         </li>
       </ul>
