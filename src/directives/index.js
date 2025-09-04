@@ -25,7 +25,7 @@ export const lazyPlugin = {
               //给src属性附地址，就会自动发送网络请求
               el.src = binding.value;
               // 完成第一次加载就要停止监听
-              stop
+              stop()
             }
           }
         )
