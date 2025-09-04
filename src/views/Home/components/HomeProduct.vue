@@ -1,37 +1,39 @@
 <script setup>
-import HomePanel from "./HomePanel.vue";
-import { getGoodsAPI } from "@/apis/home";
-import { ref, onMounted } from "vue";
-const goodsProduct = ref([]);
+import HomePanel from "./HomePanel.vue"
+import { getGoodsAPI } from "@/apis/home"
+import { ref, onMounted } from "vue"
+const goodsProduct = ref([])
 const getGoods = async () => {
-  const { result } = await getGoodsAPI();
-  goodsProduct.value = result;
-};
-onMounted(() => getGoods());
+  const res = await getGoodsAPI()
+  goodsProduct.value = res.result
+}
+onMounted(() => getGoods())
 </script>
 
 <template>
   <div class="home-product">
     <HomePanel :title="cate.name" v-for="cate in goodsProduct" :key="cate.id">
-      <div class="box">
-        <RouterLink class="cover" to="/">
-          <img :src="cate.picture" />
-          <strong class="label">
-            <span>{{ cate.name }}馆</span>
-            <span>{{ cate.saleInfo }}</span>
-          </strong>
-        </RouterLink>
-        <ul class="goods-list">
-          <li v-for="good in cate.goods" :key="good.id">
-            <RouterLink to="/" class="goods-item">
-              <img :src="good.picture" alt="" />
-              <p class="name ellipsis">{{ good.name }}</p>
-              <p class="desc ellipsis">{{ good.desc }}</p>
-              <p class="price">&yen;{{ good.price }}</p>
-            </RouterLink>
-          </li>
-        </ul>
-      </div>
+      <template #main>
+        <div class="box">
+          <RouterLink class="cover" to="/">
+            <img :src="cate.picture" />
+            <strong class="label">
+              <span>{{ cate.name }}馆</span>
+              <span>{{ cate.saleInfo }}</span>
+            </strong>
+          </RouterLink>
+          <ul class="goods-list">
+            <li v-for="goods in cate.goods" :key="goods.id">
+              <RouterLink to="/" class="goods-item">
+                <img :src="goods.picture" alt="" />
+                <p class="name ellipsis">{{ goods.name }}</p>
+                <p class="desc ellipsis">{{ goods.desc }}</p>
+                <p class="price">&yen;{{ goods.price }}</p>
+              </RouterLink>
+            </li>
+          </ul>
+        </div>
+      </template>
     </HomePanel>
   </div>
 </template>
