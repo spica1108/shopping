@@ -3,7 +3,7 @@ import axios from 'axios'
 
 //create方法
 //用变量接收axios实例
-const service = axios.create({
+const httpInstance = axios.create({
   baseURL: 'http://pcapi-xiaotuxian-front-devtest.itheima.net', //基础路径，根域名
   timeout: 5000 //请求超时时间，5秒
 })
@@ -11,7 +11,7 @@ const service = axios.create({
 
 
 //请求拦截器
-service.interceptors.request.use(
+httpInstance.interceptors.request.use(
   (config) => {
     //config是请求的配置信息对象
     //我们可以在这里对请求信息进行处理，比如统一设置token
@@ -25,7 +25,7 @@ service.interceptors.request.use(
 )
 
 //响应拦截器
-service.interceptors.response.use(
+httpInstance.interceptors.response.use(
   (response) => {
     //响应成功进入这里，状态码2xx都会进入这里
     return response.data //只返回响应体数据
@@ -37,4 +37,4 @@ service.interceptors.response.use(
 )
 
 //导出axios实例
-export default service
+export default httpInstance

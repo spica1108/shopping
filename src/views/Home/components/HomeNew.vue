@@ -12,7 +12,6 @@ getNewList();
 </script>
 
 <template>
-  <!-- 这部分插入HomePanel插槽的区域 -->
   <HomePanel title="新鲜好物" sub-title="新鲜出炉 品质靠谱">
     <template #main>
       <ul class="goods-list">
@@ -26,7 +25,6 @@ getNewList();
       </ul>
     </template>
   </HomePanel>
-
 </template>
 
 <style scoped lang="scss">

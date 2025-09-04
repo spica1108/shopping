@@ -1,8 +1,8 @@
-import service from "@/utils/http"
+import httpInstance from "@/utils/http"
 
 //此函数为promise
 export function getCateroryAPI(){
-  return service({
+  return httpInstance({
     url:'/home/category/head'
   })
 }
