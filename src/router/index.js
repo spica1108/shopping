@@ -22,7 +22,8 @@ const router = createRouter({
           component:Home
         },
         {
-          path:'category',
+          //需要一个参数，加上占位的id参数
+          path:'category/:id',
           component:Category
         }
         //记得路由出口
