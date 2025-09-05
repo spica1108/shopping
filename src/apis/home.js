@@ -1,9 +1,16 @@
 import httpInstance from "@/utils/http"
 
-export function getBannerAPI(){
+//补充参数
+export function getBannerAPI(params = {}) {
+  // 需要适配，默认为1 商品为2
+  //不传就是1，传就传2
+  const { distributionSite = "1" } = params;
   return httpInstance({
-    url:'/home/banner',
-  })
+    url: "/home/banner",
+    params: {
+      distributionSite,
+    },
+  });
 }
 
 /**
@@ -39,13 +46,4 @@ export const getGoodsAPI = () => {
   })
 }
 
-export function getBannerAPI(params = {}) {
-  // 默认为1 商品为2
-  const { distributionSite = "1" } = params;
-  return httpInstance({
-    url: "/home/banner",
-    params: {
-      distributionSite,
-    },
-  });
-}
+

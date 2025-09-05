@@ -12,8 +12,9 @@ const categoryStore = useCategoryStore()
       </h1>
       <ul class="app-header-nav">
         <li class="home" v-for="item in categoryStore.categoryList" :key="item.id">
-          <!-- to属性指向的路径，点击就可以跳过去，拼参数id，加‘：’可以动态识别 -->
-          <RouterLink :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
+          <!-- to属性指向的路径，点击就可以跳过去，拼参数id，加‘：’可以动态识别
+           active-class是激活(在这里是高亮) -->
+          <RouterLink active-class="active" :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
         </li>
       </ul>
       <div class="search">

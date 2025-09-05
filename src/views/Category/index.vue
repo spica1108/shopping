@@ -4,6 +4,8 @@ import { ref, onMounted } from "vue";
 // 获取路由参数
 import { useRoute } from "vue-router";
 import { getTopCategoryAPI } from "@/apis/category";
+import { getBannerAPI } from '@/apis/home'
+import GoodsItem from '../Home/components/GoodsItem.vue'
 
 //ref()定义初始值，依照后端返回的数据类型来定义，这里是对象
 const categoryData = ref({});
@@ -19,9 +21,19 @@ const getCategory = async () => {
 };
 
 onMounted(() => {
-  console.log("这里是category");
   getCategory();
 });
+
+//获取banner
+const bannerList = ref([])
+onMounted(async () => {
+  const res = await getBannerAPI({
+    distributionSite: '2'
+  })
+  bannerList.value = res.result
+  console.log(res);
+})
+
 </script>
 
 <template>
@@ -36,6 +48,35 @@ onMounted(() => {
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
           <el-breadcrumb-item>{{ categoryData.name }}</el-breadcrumb-item>
         </el-breadcrumb>
+      </div>
+      <!-- 轮播图 -->
+      <div class="home-banner">
+        <el-carousel height="500px">
+          <el-carousel-item v-for="item in bannerList" :key="item.id">
+            <!-- 查看接口文档 -->
+            <img :src="item.imgUrl" alt="">
+          </el-carousel-item>
+        </el-carousel>
+      </div>
+
+      <div class="sub-list">
+        <h3>全部分类</h3>
+        <ul>
+          <li v-for="i in categoryData.children" :key="i.id">
+            <RouterLink to="/">
+              <img :src="i.picture" />
+              <p>{{ i.name }}</p>
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
+      <div class="ref-goods" v-for="item in categoryData.children" :key="item.id">
+        <div class="head">
+          <h3>- {{ item.name }}-</h3>
+        </div>
+        <div class="body">
+          <GoodsItem v-for="good in item.goods" :goods="good" :key="good.id" />
+        </div>
       </div>
     </div>
   </div>
@@ -118,6 +159,16 @@ onMounted(() => {
 
   .bread-container {
     padding: 25px 0;
+  }
+}
+.home-banner {
+  width: 1240px;
+  height: 500px;
+  margin: 0 auto;
+
+  img {
+    width: 100%;
+    height: 500px;
   }
 }
 </style>

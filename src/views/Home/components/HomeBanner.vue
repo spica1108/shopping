@@ -9,10 +9,7 @@ onMounted(async () => {
   console.log(res);
 })
 
-
 </script>
-
-
 
 <template>
   <div class="home-banner">
@@ -24,8 +21,6 @@ onMounted(async () => {
     </el-carousel>
   </div>
 </template>
-
-
 
 <style scoped lang='scss'>
 .home-banner {
