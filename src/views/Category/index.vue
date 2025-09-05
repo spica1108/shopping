@@ -6,16 +6,18 @@ import { useRoute } from "vue-router";
 import { getTopCategoryAPI } from "@/apis/category";
 import { getBannerAPI } from '@/apis/home'
 import GoodsItem from '../Home/components/GoodsItem.vue'
+import { onBeforeRouteUpdate } from "vue-router";
 
 //ref()定义初始值，依照后端返回的数据类型来定义，这里是对象
 const categoryData = ref({});
 //调用方法
 const route = useRoute();
 
-const getCategory = async () => {
+//这里id是默认参数
+const getCategory = async (id = route.params.id) => {
   // 拿到路由参数
   //如何在setup中获取路由参数 useRoute() -> route 等价于this.$route
-  const res = await getTopCategoryAPI(route.params.id);
+  const res = await getTopCategoryAPI(id);
 
   categoryData.value = res.result;
 };
@@ -23,6 +25,14 @@ const getCategory = async () => {
 onMounted(() => {
   getCategory();
 });
+
+//目标：路由参数变化时，把分类数据重新获取
+//to代表目标路由对象
+onBeforeRouteUpdate((to) => {
+  //to是即将要跳转的路由对象，会拿到最新的数据
+  //调函数时用到的路由参数是最新的，但是route.params.id存在滞后性
+  getCategory(to.params.id)
+})
 
 //获取banner
 const bannerList = ref([])
