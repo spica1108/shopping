@@ -1,5 +1,5 @@
 <!-- 面包屑导航，调接口，拿到数据，渲染 -->
-<script setup>
+<!-- <script setup>
 import { ref, onMounted } from "vue";
 // 获取路由参数
 import { useRoute } from "vue-router";
@@ -44,7 +44,21 @@ onMounted(async () => {
   console.log(res);
 })
 
+</script> -->
+
+<script setup>
+
+import GoodsItem from '../Home/components/GoodsItem.vue'
+import { useBanner } from './composables/useBanner'
+import { useCategory } from './composables/useCategory'
+//调用一个叫做 useCategory 的函数，这个函数返回一个对象，
+// 然后从返回的对象中解构（提取）出一个名为 categoryData 的属性，
+// 并把它赋值给一个同名的常量（const categoryData）
+const { bannerList } = useBanner()
+const { categoryData } = useCategory()
+
 </script>
+
 
 <template>
   <div class="top-category">
@@ -73,7 +87,7 @@ onMounted(async () => {
         <h3>全部分类</h3>
         <ul>
           <li v-for="i in categoryData.children" :key="i.id">
-            <RouterLink to="/">
+            <RouterLink :to="`/category/sub/${i.id}`">
               <img :src="i.picture" />
               <p>{{ i.name }}</p>
             </RouterLink>
