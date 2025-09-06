@@ -1,7 +1,5 @@
 <script setup>
 import DetailHot from './components/DetailHot.vue'
-import ImageView from '@/components/ImageView/index.vue'
-import sku from '@/components/sku/index.vue'
 import { getDetail } from '@/apis/detail'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -45,7 +43,7 @@ const skuChange = (sku) =>{
           <div class="goods-info">
             <div class="media">
               <!-- 图片预览区 -->
-              <ImageView/>
+              <XtxImageView :image-list="goods.mainPictures"/>
               <!-- 统计数量 -->
               <ul class="goods-sales">
                 <li>
@@ -95,7 +93,7 @@ const skuChange = (sku) =>{
               </div>
               <!-- sku组件 -->
                <!-- 接受参数传下去，要求把详情大对象传下去 -->
-              <sku :goods="goods" @change="skuChange"/>
+              <XtxSku :goods="goods" @change="skuChange"/>
               <!-- 数据组件 -->
 
               <!-- 按钮组件 -->
