@@ -1,6 +1,7 @@
 //axios基础的封装
 import axios from 'axios'
 import { ElMessage } from "element-plus"
+import { useUserStore } from '@/stores/user'
 import "element-plus/theme-chalk/el-message.css"
 
 //create方法
@@ -12,19 +13,33 @@ const httpInstance = axios.create({
 //create方法会返回一个axios实例，我们可以用这个实例去发请求
 
 
-//请求拦截器
-httpInstance.interceptors.request.use(
-  (config) => {
-    //config是请求的配置信息对象
-    //我们可以在这里对请求信息进行处理，比如统一设置token
-    // config.headers.Authorization = `Bearer ${token}`
-    return config //一定要返回配置对象
-  },
-  (e) => {
-    //请求失败的回调函数，一般是网络异常
-    return Promise.reject(e)
+// //请求拦截器
+// httpInstance.interceptors.request.use(
+//   (config) => {
+//     //config是请求的配置信息对象
+//     //我们可以在这里对请求信息进行处理，比如统一设置token
+//     // config.headers.Authorization = `Bearer ${token}`
+//     return config //一定要返回配置对象
+//   },
+//   (e) => {
+//     //请求失败的回调函数，一般是网络异常
+//     return Promise.reject(e)
+//   }
+// )
+
+//设置token，因为请求会有多次都用到这个接口，一个一个配置太麻烦
+
+// axios请求拦截器
+httpInstance.interceptors.request.use(config => {
+  // 1. 从pinia获取token数据
+  const userStore = useUserStore()
+  // 2. 按照后端的要求拼接token数据
+  const token = userStore.userInfo.token
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
   }
-)
+  return config
+}, e => Promise.reject(e))
 
 //响应拦截器
 httpInstance.interceptors.response.use(
