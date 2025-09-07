@@ -1,5 +1,7 @@
 //axios基础的封装
 import axios from 'axios'
+import { ElMessage } from "element-plus"
+import "element-plus/theme-chalk/el-message.css"
 
 //create方法
 //用变量接收axios实例
@@ -18,21 +20,27 @@ httpInstance.interceptors.request.use(
     // config.headers.Authorization = `Bearer ${token}`
     return config //一定要返回配置对象
   },
-  (error) => {
+  (e) => {
     //请求失败的回调函数，一般是网络异常
-    return Promise.reject(error)
+    return Promise.reject(e)
   }
 )
 
 //响应拦截器
 httpInstance.interceptors.response.use(
-  (response) => {
+  (res) => {
     //响应成功进入这里，状态码2xx都会进入这里
-    return response.data //只返回响应体数据
+    return res.data //只返回响应体数据
   },
-  (error) => {
+  (e) => {
+    //统一错误提示
+    ElMessage({
+      type:'warning',
+      //不知道怎么获取可以把e打印一下
+      message: e.response.data.message
+    })
     //响应失败进入这里，状态码4xx，5xx会进入这里
-    return Promise.reject(error)
+    return Promise.reject(e)
   }
 )
 

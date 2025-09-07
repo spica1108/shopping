@@ -14,6 +14,7 @@ import { lazyPlugin } from '@/directives'
 import { componentPlugin } from '@/components'
 
 const app = createApp(App)
+
 //这里都是插件
 app.use(createPinia())
 app.use(router)

@@ -1,11 +1,17 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue";
+import { ElMessage } from "element-plus";
+import "element-plus/theme-chalk/el-message.css";
+import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/user.js";
+const router = useRouter();
 // 表单数据对象
 const userInfo = ref({
-  account: '1311111111',
-  password: '123456',
+  account: '',
+  password: '',
   agree: true
 })
+//账号：xiaotuxian001  密码：123456
 
 // 规则数据对象
 const rules = {
@@ -18,13 +24,38 @@ const rules = {
   ],
   agree: [
     {
+      //rule当前用的规则，val当前用户输入的值（比如input框，输入的值会被value拿到）
+      // callback 校验处理函数，校验通过调用
       validator: (rule, val, callback) => {
+        //勾选就通过不勾选就不通过
         return val ? callback() : new Error('请先同意协议')
       }
     }
   ]
 }
 
+const userStore = useUserStore();
+const formRef = ref(null);
+const doLogin = () => {
+  const { account, password } = userInfo.value;
+  // 调用实例方法
+  formRef.value.validate(async (valid) => {
+    // valid: 所有表单都通过校验  才为true
+    console.log(valid);
+    // 以valid做为判断条件 如果通过校验才执行登录逻辑
+    if (valid) {
+      // TODO LOGIN
+      await userStore.getUserInfo({ account, password });
+      // 这里其实很奇怪，不知道为什么登录出错就不执行这个了
+      // 1. 提示用户
+      ElMessage({ type: "success", message: "登录成功" });
+      // 2. 跳转首页
+      router.replace({ path: "/" });
+    }
+  });
+};
+
+//在拦截器可以对所有接口进行统一控制
 
 </script>
 
