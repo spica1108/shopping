@@ -3,7 +3,7 @@ import '@/styles/common.scss'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import App from './App.vue'
 import router from './router'
 
@@ -12,11 +12,14 @@ import { lazyPlugin } from '@/directives'
 
 //引入全局组件插件
 import { componentPlugin } from '@/components'
+import { formContextKey } from 'element-plus'
 
 const app = createApp(App)
-
+const pinia = createPinia()
+//注册持久化插件
+pinia.use(piniaPluginPersistedstate)
 //这里都是插件
-app.use(createPinia())
+app.use(pinia)
 app.use(router)
 //执行过程：先执行use方法，在执行插件
 app.use(lazyPlugin)
