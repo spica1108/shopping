@@ -3,6 +3,7 @@ import axios from 'axios'
 import { ElMessage } from "element-plus"
 import { useUserStore } from '@/stores/user'
 import "element-plus/theme-chalk/el-message.css"
+import router from '@/router'
 
 //create方法
 //用变量接收axios实例
@@ -48,12 +49,22 @@ httpInstance.interceptors.response.use(
     return res.data //只返回响应体数据
   },
   (e) => {
+    const userStore = useUserStore()
     //统一错误提示
     ElMessage({
       type:'warning',
       //不知道怎么获取可以把e打印一下
       message: e.response.data.message
     })
+
+    //401token失效处理
+    //1.清除本地用户数据
+    //2.跳转到登录页
+    if (e.response.status ===401 ){
+      userStore.clearUserInfo()
+      router.push('/login')
+    }
+
     //响应失败进入这里，状态码4xx，5xx会进入这里
     return Promise.reject(e)
   }

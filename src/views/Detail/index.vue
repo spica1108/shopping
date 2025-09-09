@@ -1,8 +1,12 @@
 <script setup>
 import DetailHot from './components/DetailHot.vue'
 import { getDetail } from '@/apis/detail'
+import { ElMessage, selectKey } from 'element-plus'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useCartStore } from '@/stores/cartStore'
+
+const cartStore = useCartStore()
 const goods = ref({})
 const route = useRoute()
 const getGoods = async () => {
@@ -11,8 +15,41 @@ const getGoods = async () => {
 }
 onMounted(() => getGoods())
 //sku规格被操作时
+let skuObj = {}
 const skuChange = (sku) =>{
   console.log(sku)
+  skuObj = sku
+}
+//sku组件，选择是完整对象，不选择是空对象
+
+//声明
+//值
+const count = ref(1)
+const countChange = (count) =>{
+  console.log(count)
+}
+//修改的方法
+
+//添加购物车
+const addCart = () => {
+  if(skuObj.skuId){
+    //规则已经选择 触发action，引入store，store调action
+    cartStore.addCart({
+      //传完整的商品对象
+      id: goods.value.id,
+      name: goods.value.name,
+      pictures: goods.value.mainPictures[0],
+      price: goods.value.price,
+      count: count.value,
+      skuId: skuObj.skuId,
+      attrsText: skuObj.skuId,
+      attrsText: skuObj.specsText,
+      selected: true
+    })
+  } else{
+    //规格没有选择 提示用户
+    ElMessage.warning('请选择商品')
+  }
 }
 
 </script>
@@ -95,10 +132,11 @@ const skuChange = (sku) =>{
                <!-- 接受参数传下去，要求把详情大对象传下去 -->
               <XtxSku :goods="goods" @change="skuChange"/>
               <!-- 数据组件 -->
-
+              <!-- 绑定的是商品数量 -->
+              <el-input-number v-model="count" @change="countChange"></el-input-number>
               <!-- 按钮组件 -->
               <div>
-                <el-button size="large" class="btn">
+                <el-button size="large" class="btn" @click="addCart">
                   加入购物车
                 </el-button>
               </div>
