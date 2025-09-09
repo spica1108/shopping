@@ -1,7 +1,7 @@
 //封装购物车模块
 
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 //第一个参数是模块名，第二个参数是回调函数，在内部编写store和action
 export const useCartStore = defineStore('cart',() => {
@@ -23,9 +23,33 @@ export const useCartStore = defineStore('cart',() => {
       cartList.value.push(goods)
     }
   }
+
+  //删除购物车
+  //传skuId
+  const delCart = (skuId) =>{
+    //找到要删除的下标值 splice
+    //使用数组的过滤方法 filter
+    //使用传下来的参数skuid参数是否满足item自身的skuid，匹配上就是要删除的项
+    //.findIndex(callback)这是JS数组的方法，用来找到符合条件的第一个元素的 索引（下标）
+    const idx = cartList.value.findIndex((item) => skuId === item.skuId)
+    //splice删除或添加元素，idx找到的商品下标，1删除1个元素，所以就是把购物车里找到的商品删除掉
+    cartList.value.splice(idx, 1)
+  }
+
+  //计算属性
+  //1.总的数量 所有项的count之和
+  //reduce方法第一个参数是回调，编写计算逻辑，第二个参数有初始值
+  //a是每次累加完都会传过来，c是每一项
+  const allCount = computed(()=> cartList.value.reduce((a,c) => a + c.count ,0))
+  //2.总价 所有项的count*price之和
+  const allPrice = computed(()=> cartList.value.reduce((a,c) => a + c.count * c.price ,0))
+
   return {
     cartList,
-    addCart
+    addCart,
+    delCart,
+    allCount,
+    allPrice
   }
 }, {
   persist: true,
