@@ -4,7 +4,6 @@ import { ElMessage } from "element-plus"
 import { useUserStore } from '@/stores/user'
 import router from '@/router'
 import "element-plus/theme-chalk/el-message.css"
-import router from '@/router'
 
 //create方法
 //用变量接收axios实例

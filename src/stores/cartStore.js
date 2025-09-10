@@ -3,7 +3,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { useUserStore } from './user'
-import { insertCartAPI,findNewCartListAPI } from '@/stores/cart'
+import { insertCartAPI,findNewCartListAPI, delCartAPI } from '@/stores/cart'
 
 
 //第一个参数是模块名，第二个参数是回调函数，在内部编写store和action
@@ -18,6 +18,15 @@ export const useCartStore = defineStore('cart',() => {
   const cartList = ref([])
 
 
+  //封装函数：获取最新购物车列表action
+  const updateNewList = async() => {
+    //获取最新购物车列表
+    const res = await findNewCartListAPI()
+    //覆盖本地列表
+    cartList.value = res.result
+  }
+
+
   //定义action，添加的方法 —— addCart
     const addCart = async (goods) => {
       //用数据需要解构出来
@@ -28,10 +37,7 @@ export const useCartStore = defineStore('cart',() => {
         //1.调用加入购物车接口 2.调用加入购物车列表接口
         //封装之后调用
         await insertCartAPI({ skuId,count })
-        //获取最新购物车列表
-        const res = await findNewCartListAPI()
-        //覆盖本地列表
-        cartList.value = res.result
+        updateNewList()
 
       }else{
         // 添加购物车操作
@@ -54,15 +60,24 @@ export const useCartStore = defineStore('cart',() => {
 
   //删除购物车
   //传skuId
-  const delCart = (skuId) =>{
-    //找到要删除的下标值 splice
-    //使用数组的过滤方法 filter
-    //使用传下来的参数skuid参数是否满足item自身的skuid，匹配上就是要删除的项
-    //.findIndex(callback)这是JS数组的方法，用来找到符合条件的第一个元素的 索引（下标）
-    const idx = cartList.value.findIndex((item) => skuId === item.skuId)
-    //splice删除或添加元素，idx找到的商品下标，1删除1个元素，所以就是把购物车里找到的商品删除掉
-    cartList.value.splice(idx, 1)
+  const delCart = async (skuId) =>{
+    if(isLogin.value){
+      //调用接口实现接口
+      //要求传由skuid组成的数组
+      await delCartAPI([skuId])
+      updateNewList()
+    }else{
+      //找到要删除的下标值 splice
+      //使用数组的过滤方法 filter
+      //使用传下来的参数skuid参数是否满足item自身的skuid，匹配上就是要删除的项
+      //.findIndex(callback)这是JS数组的方法，用来找到符合条件的第一个元素的 索引（下标）
+      const idx = cartList.value.findIndex((item) => skuId === item.skuId)
+      //splice删除或添加元素，idx找到的商品下标，1删除1个元素，所以就是把购物车里找到的商品删除掉
+      cartList.value.splice(idx, 1)
+    }
   }
+
+
 
   //单选功能
   //接受左边调用action时传过来参数，
