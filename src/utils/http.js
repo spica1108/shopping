@@ -54,7 +54,8 @@ httpInstance.interceptors.response.use(
     ElMessage({
       type:'warning',
       //不知道怎么获取可以把e打印一下
-      message: e.response.data.message
+      //如果没有 response，就用 axios 默认的 e.message
+      message: e.response?.data?.message || e.message || '请求出错'
     })
 
     //401token失效处理
