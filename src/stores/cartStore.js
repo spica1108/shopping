@@ -67,9 +67,19 @@ export const useCartStore = defineStore('cart',() => {
     //接收一个参数 selected（布尔值）true：全选，false：全不选，
     // 遍历购物车数组中的每一个商品项，将每个商品的 selected 属性设置为传入的状态值，
     // 会触发 Vue 的响应式更新
-    //传过来是ture点击就会全选，是false点击会全不选
+    //点击会触发函数，函数接受点击传过来的值，
     cartList.value.forEach(item => item.selected = selected)
   }
+
+  // 3. 已选择数量
+  //.reduce((a, c) => a + c.count, 0)
+  //a：累加器（accumulator），保存累计结果
+  //c：当前处理的数组元素（current item）
+  //a + c.count：将当前商品的 count 数量加到累加器
+  //0：初始值，从0开始累加
+const selectedCount = computed(() => cartList.value.filter(item => item.selected).reduce((a, c) => a + c.count, 0))
+// 4. 已选择商品价钱合计
+const selectedPrice = computed(() => cartList.value.filter(item => item.selected).reduce((a, c) => a + c.count * c.price, 0))
 
   return {
     cartList,
@@ -79,7 +89,9 @@ export const useCartStore = defineStore('cart',() => {
     allPrice,
     singleCheck,
     isAll,
-    allCheck
+    allCheck,
+    selectedCount,
+    selectedPrice
   }
 }, {
   persist: true,
