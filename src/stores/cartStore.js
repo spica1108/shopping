@@ -54,13 +54,32 @@ export const useCartStore = defineStore('cart',() => {
   //2.总价 所有项的count*price之和
   const allPrice = computed(()=> cartList.value.reduce((a,c) => a + c.count * c.price ,0))
 
+  //是否全选
+  //rray.prototype.every 会遍历数组的每一项，判断回调函数是否对所有元素都返回 true
+  //检查数组里的每个商品是否都被选中
+  //当 cartList.value 中任意 selected 改变时，isAll.value 会自动重新计算。
+  //isAll.value 的值是布尔型：true → 全选，false → 有未选中的商品
+  const isAll = computed(()=>cartList.value.every((item) => item.selected))
+
+  //全选功能
+  const allCheck = (selected)=>{
+    // 把cartList中的每一项的selected都设置为当前的全选框状态
+    //接收一个参数 selected（布尔值）true：全选，false：全不选，
+    // 遍历购物车数组中的每一个商品项，将每个商品的 selected 属性设置为传入的状态值，
+    // 会触发 Vue 的响应式更新
+    //传过来是ture点击就会全选，是false点击会全不选
+    cartList.value.forEach(item => item.selected = selected)
+  }
+
   return {
     cartList,
     addCart,
     delCart,
     allCount,
     allPrice,
-    singleCheck
+    singleCheck,
+    isAll,
+    allCheck
   }
 }, {
   persist: true,
