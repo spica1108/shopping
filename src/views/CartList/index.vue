@@ -1,6 +1,12 @@
 <script setup>
 import { useCartStore } from '@/stores/cartStore'
 const cartStore = useCartStore()
+//单选回调
+//i中有判断条件，selected有选中的状态
+const singleCheck = (i, selected) => {
+ cartStore.singleCheck(i.skuId,selected)
+}
+
 </script>
 
 <template>
@@ -22,10 +28,15 @@ const cartStore = useCartStore()
           </thead>
           <!-- 商品列表 -->
           <tbody>
+            <!-- i中有当前的skuid -->
             <tr v-for="i in cartStore.cartList" :key="i.id">
               <td>
-                <!-- 单选框 -->
-                <el-checkbox/>
+                <!-- 单选框
+                 @change监听元素的变化事件，(selected) => 箭头函数，定义一个匿名函数，这个函数接受一个参数，参数名是 selected
+                 这个 selected 就是事件触发时，元素传递过来的值
+                 singleCheck(i, selected): 最终被调用的方法，接收两个参数：
+                  i: 当前项在循环中的索引值，selected: 上面箭头函数接收到的值，再传递给 singleCheck 方法 -->
+                <el-checkbox :model-value="i.selected" @change="(selected) => singleCheck(i, selected)" />
               </td>
               <td>
                 <div class="goods">
