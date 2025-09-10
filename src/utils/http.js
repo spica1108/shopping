@@ -2,6 +2,7 @@
 import axios from 'axios'
 import { ElMessage } from "element-plus"
 import { useUserStore } from '@/stores/user'
+import router from '@/router'
 import "element-plus/theme-chalk/el-message.css"
 import router from '@/router'
 
@@ -66,7 +67,15 @@ httpInstance.interceptors.response.use(
     }
 
     //响应失败进入这里，状态码4xx，5xx会进入这里
+    //401token失效处理
+    //1.清除本地用户数据,本地数据在pinia,把pinia的数据清除
+    //2.跳转到登录页,路由跳转
+    if (e.response.status === 401){
+      userStore.clearUserInfo()
+      router.push('/login')
+    }
     return Promise.reject(e)
+
   }
 )
 
