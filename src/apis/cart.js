@@ -30,3 +30,12 @@ export const delCartAPI = (ids) => {
     }
   })
 }
+
+// 加入购物车
+export const margeCartAPI = (data) => {
+  return request({
+    url: '/member/cart/merge',
+    method: 'POST',
+    data
+  })
+}

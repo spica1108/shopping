@@ -3,7 +3,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { useUserStore } from './user'
-import { insertCartAPI,findNewCartListAPI, delCartAPI } from '@/stores/cart'
+import { insertCartAPI,findNewCartListAPI, delCartAPI } from '@/apis/cart'
 
 
 //第一个参数是模块名，第二个参数是回调函数，在内部编写store和action
@@ -139,7 +139,8 @@ const selectedPrice = computed(() => cartList.value.filter(item => item.selected
     allCheck,
     selectedCount,
     selectedPrice,
-    clearCart
+    clearCart,
+    updateNewList
   }
 }, {
   persist: true,
