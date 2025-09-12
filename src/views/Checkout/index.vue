@@ -1,6 +1,8 @@
 <script setup>
-import { getCheckInfoAPI } from '@/apis/checkout'
+import { getCheckInfoAPI,createOrderAPI } from '@/apis/checkout'
 import { onMounted,ref } from 'vue'
+import { useRouter } from 'vue-router'
+const router = useRouter
 
 //逻辑是从数组列表中筛选的
 const checkInfo = ref({})  // 订单对象,需要响应式ref对象
@@ -31,9 +33,43 @@ const switchAddress = (item) => {
   activeAddress.value = item
 }
 
+//覆盖旧购物车
 const confirm = () =>{
   curAddress.value = activeAddress.value
   showDialog.value = false
+}
+
+//封装生成订单接口
+const createOrder = async ()=>{
+  //调用接口，得到订单id，对象结构
+  const res = await createOrderAPI({
+  //默认
+    deliveryTimeType: 1,
+    payType: 1,
+    payChannel: 1,
+    buyerMessage: '',
+    //从商品列表取出skuid和count，返回数组
+    goods: checkInfo.value.goods.map(item => {
+      return {
+        skuId: item.skuId,
+        count: item.count
+      }
+    }),
+
+    //收货地址id
+    addressId: curAddress.value.id
+  })
+
+  //得到订单id，看接口文档存在哪里
+  const orderId = res.result.id
+
+  //路由跳转
+  router.push({
+    path: '/pay',
+    query: {
+      id: orderId
+    }
+  })
 }
 
 </script>
@@ -130,7 +166,7 @@ const confirm = () =>{
         </div>
         <!-- 提交订单 -->
         <div class="submit">
-          <el-button type="primary" size="large" >提交订单</el-button>
+          <el-button @click="createOrder" type="primary" size="large" >提交订单</el-button>
         </div>
       </div>
     </div>
