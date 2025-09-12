@@ -4,7 +4,7 @@
 import { useScroll } from '@vueuse/core'
 const { y } = useScroll(window)
 //使用pinia中的数据
-import { useCategoryStore } from '@/stores/category'
+import { useCategoryStore } from '@/stores/categoryStore'
 //创建实例对象，就可以使用里面的数据
 const categoryStore = useCategoryStore()
 
