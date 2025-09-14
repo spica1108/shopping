@@ -62,10 +62,10 @@ const router = createRouter({
         {
           path: '/member',
           component: Member,
-
+          //将三级路由作为默认选项渲染，将对应路径清空
           children: [
             {
-              path: 'user',
+              path: '',
               component: UserInfo
             },
             {

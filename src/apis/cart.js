@@ -1,9 +1,9 @@
 //封装购物车相关接口
-import request from '@/utils/http'
+import httpInstance from '@/utils/http'
 
 // 加入购物车
 export const insertCartAPI = ({ skuId, count }) => {
-  return request({
+  return httpInstance({
     url: '/member/cart',
     method: 'POST',
     data: {
@@ -15,14 +15,14 @@ export const insertCartAPI = ({ skuId, count }) => {
 
 //获取最新购物车列表
 export const findNewCartListAPI =() => {
-  return request({
+  return httpInstance({
     url:'/member/cart'
   })
 }
 
 // 删除购物车
 export const delCartAPI = (ids) => {
-  return request({
+  return httpInstance({
     url: '/member/cart',
     method: 'DELETE',
     data: {
@@ -33,7 +33,7 @@ export const delCartAPI = (ids) => {
 
 // 加入购物车
 export const margeCartAPI = (data) => {
-  return request({
+  return httpInstance({
     url: '/member/cart/merge',
     method: 'POST',
     data

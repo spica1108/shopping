@@ -1,4 +1,4 @@
-import request from "@/utils/http.js";
+import httpInstance from "@/utils/http.js";
 //因为之前的httpInstance 是export default 所以可以换个名称导入
 // 如果是export const 就要按照原名导入
 /**
@@ -7,7 +7,7 @@ import request from "@/utils/http.js";
  * @return {*}
  */
 export const getTopCategoryAPI = (id) => {
-  return request({
+  return httpInstance({
     url: "/category",
     // 网络请求中，params 通常指代“查询参数”或“URL参数”
     params: {
@@ -23,7 +23,7 @@ export const getTopCategoryAPI = (id) => {
  */
 
 export const getCategoryFilterAPI = (id) => {
-  return request({
+  return httpInstance({
     url:'/category/sub/filter',
     params:{
       id
@@ -42,7 +42,7 @@ export const getCategoryFilterAPI = (id) => {
  * @return {*}
  */
 export const getSubCategoryAPI = (data) => {
-  return request({
+  return httpInstance({
     url:'/category/goods/temporary',
     method:'POST',
     data
